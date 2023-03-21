@@ -48,7 +48,6 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="myscripts.js"></script>
     <title>Document</title>
 </head>
 <body>
@@ -57,9 +56,25 @@
     <form action="register.php" method="POST">
         <input type="username" name="username" required placeholder="Username">
         <input type="email" name="email" required placeholder="Email">
-        <input type="password" id="password" name="password" required placeholder="Password">
-        <input type="password" id="confirm_password" required placeholder="Repeat password">
+        <input type="password" id="password" name="password" required placeholder="Password" onchange="validatePassword()">
+        <input type="password" id="confirm_password" required placeholder="Repeat password" onchange="validatePassword()">
         <input type="submit">
     </form>
+
+    <script>
+        var password = document.getElementById("password")
+        , confirm_password = document.getElementById("confirm_password");
+
+        function validatePassword(){
+            if(password.value != confirm_password.value) {
+                confirm_password.setCustomValidity("Passwords Don't Match");
+            } else {
+                confirm_password.setCustomValidity('');
+            }
+        }
+
+        password.onchange = validatePassword;
+        confirm_password.onkeyup = validatePassword;
+    </script>
 </body>
 </html>

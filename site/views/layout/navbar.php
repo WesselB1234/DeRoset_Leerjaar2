@@ -7,9 +7,9 @@
     <a href="login.php">Login</a>
 <?php }
 else {?>
-    <a href="login.php?logout=true">Logout</a>
+    <a href="login.php?logout=true">Logout <?php echo $_SESSION["user"]["email"] ?></a>
 <?php }?>
 
-<?php if(isset($_SESSION["user"]) && $_SESSION["user"]["role"] == "Staff"){?>
+<?php if(isset($_SESSION["user"]) && $_SESSION["user"]["role"] == "staff"){?>
     <a href="admin/index.php">Personeel</a>
 <?php }?>
