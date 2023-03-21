@@ -58,7 +58,7 @@
         <input type="username" name="username" required placeholder="Username">
         <input type="email" name="email" required placeholder="Email">
         <input type="password" id="password" name="password" required placeholder="Password">
-        <input type="password" id="repeat_password" required placeholder="Repeat password">
+        <input type="password" id="confirm_password" required placeholder="Repeat password">
         <input type="submit">
     </form>
 </body>
