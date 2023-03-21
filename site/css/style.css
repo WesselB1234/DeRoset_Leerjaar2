@@ -1,0 +1,56 @@
+.pageLayoutGrid{
+
+    display: grid;
+    grid-template-areas:
+        'home empty navbar navbar navbar navbar'
+        'menu empty content content content content'
+        'dailyTop empty content content content content'
+        'popularTop empty content content content content'
+        'popularTop empty content content content content'
+        'footer footer footer footer footer footer';
+    gap: 10px;
+    padding: 10px;
+    background-color: aliceblue;
+}
+
+.pageLayoutGrid > div{
+    background-color: rgba(255, 255, 255, 0.8);
+    text-align: center;
+    padding: 20px 0;
+    font-size: 30px;
+}
+
+.pageLayoutGrid .home{
+    grid-area: home;
+    background-color: blue;
+}
+
+.pageLayoutGrid .navbar{
+    grid-area: navbar;
+    background-color: blue;
+}
+
+.pageLayoutGrid .dailyTop{
+    grid-area: dailyTop;
+    background-color: blue;
+}
+
+.pageLayoutGrid .dailyTop{
+    grid-area: dailyTop;
+    background-color: blue;
+}
+
+.pageLayoutGrid .popularTop{
+    grid-area: popularTop;
+    background-color: blue;
+}
+
+.pageLayoutGrid .content{
+    grid-area: content;
+    background-color: blue;
+}
+
+.pageLayoutGrid .footer{
+    grid-area: footer;
+    background-color: blue;
+}
