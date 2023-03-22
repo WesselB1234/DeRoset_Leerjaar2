@@ -4,56 +4,50 @@
 
     userPermission();
 
-    function getCartFromUser($conn,$userID){
-
-        $duplicate = $conn->prepare("SELECT * FROM carts WHERE user_id=:user_id");
-        $duplicate->bindParam("user_id",$userID);
-        $duplicate->execute();
-        $duplicate = $duplicate->fetch();
-
-        if(!empty($duplicate)){
-            return $duplicate;
-        }
-
-        return false;
-    }
-
-    function createCart($conn,$userID){
-
-        $createCart = $conn->prepare("INSERT INTO carts(user_id,is_deliver) VALUES (:user_id,false)");
-        $createCart->bindParam("user_id",$userID);
-        $createCart->execute();
-    }
-
-    function emptyCart($conn,$cartID,$userID){
+    function emptyCart($conn,$userID){
         
-        $deleteCart = $conn->prepare("DELETE FROM carts WHERE id=:cart_id");
-        $deleteCart->bindParam("cart_id",$cartID);
+        $deleteCart = $conn->prepare("DELETE FROM carts_products WHERE user_id=:user_id");
+        $deleteCart->bindParam("user_id",$userID);
         $deleteCart->execute();
-
-        createCart($conn,$userID);
     }
     
-    function getCartOrders($conn,$cartID){
+    function getCartOrders($conn,$userID){
         
         $cartOrders = $conn->prepare("SELECT *,products.name as product_name FROM carts_products
         JOIN products ON products.id = carts_products.product_id
-        WHERE cart_id=:cart_id");
+        WHERE user_id=:user_id");
         
-        $cartOrders->bindParam("cart_id",$cartID);
+        $cartOrders->bindParam("user_id",$userID);
         $cartOrders->execute();
         $cartOrders = $cartOrders->fetchAll();
 
         return $cartOrders;
     }
 
-    function createOrder($conn,$userID,$cartID,$isDeliver){
+    function getLocations($conn){
         
-        $cartOrders = getCartOrders($conn,$cartID); 
+        $locations = $conn->prepare("SELECT * FROM locations");
+        $locations->execute();
+        $locations = $locations->fetchAll();
 
-        $createOrder = $conn->prepare("INSERT INTO orders(user_id,is_deliver) VALUES (:user_id,:is_deliver)");
+        return $locations;
+    }
+
+    function createOrder($conn,$userID,$isDeliver,$name,$address,$postalcode,$locationID,$telephoneNumber,$orderDate){
+        
+        $cartOrders = getCartOrders($conn,$userID); 
+
+        $createOrder = $conn->prepare("INSERT INTO orders(user_id,is_deliver,name,address,postalcode,location_id,telephone_number,order_date) 
+        VALUES (:user_id,:is_deliver,:name,:address,:postalcode,:location_id,:telephone_number,:order_date)");
+
         $createOrder->bindParam("user_id",$userID);
         $createOrder->bindParam("is_deliver",$isDeliver, $conn::PARAM_BOOL);
+        $createOrder->bindParam("name",$name);
+        $createOrder->bindParam("address",$address);
+        $createOrder->bindParam("postalcode",$postalcode);
+        $createOrder->bindParam("location_id",$locationID);
+        $createOrder->bindParam("telephone_number",$telephoneNumber);
+        $createOrder->bindParam("order_date",$orderDate);
         $createOrder->execute();
 
         $orderID = $conn->lastInsertId();
@@ -68,29 +62,59 @@
             $createProductOrder->bindParam("liter",$productOrder["liter"]);
             $createProductOrder->execute();
         }
+
+        emptyCart($conn,$userID);
+    }
+
+    function calculateTotalCostsCart($conn,$userID){
+
+        $totalCost = $conn->prepare("SELECT sum(products.price_liter * carts_products.liter) as 'total_cost' FROM carts_products
+        JOIN products ON products.id = carts_products.product_id
+        WHERE user_id=:user_id");
+        
+        $totalCost->bindParam("user_id",$userID);
+        $totalCost->execute();
+        $totalCost = $totalCost->fetch();
+
+        return $totalCost["total_cost"];
+    }
+
+    function setLiterCartProduct($conn,$userID,$productID,$liter){
+
+        $updateProductCart = $conn->prepare("UPDATE carts_products SET liter=:liter WHERE product_id=:product_id AND user_id=:user_id");
+        $updateProductCart->bindParam("liter",$liter);
+        $updateProductCart->bindParam("product_id",$productID);
+        $updateProductCart->bindParam("user_id",$userID);
+        $updateProductCart->execute();
     }
 
     $userID = $_SESSION["user"]["id"];
-    $cart = getCartFromUser($conn,$userID);
-
-    if($cart == false){
-
-        createCart($conn,$userID);
-        $cart = getCartFromUser($userID,$conn);
-    }
-    
-    $cartID = $cart["id"];
     
     if(isset($_POST["is_deliver"])){
         
         $isDeliver = $_POST["is_deliver"];
+        $name = $_POST["name"];
+        $address = $_POST["address"];
+        $postalcode = $_POST["postalcode"];
+        $locationID = $_POST["location_id"];
+        $telephoneNumber = $_POST["telephone_number"];
+        $orderDate = $_POST["order_date"];
 
-        createOrder($conn,$userID,$cartID,$isDeliver);
-        emptyCart($conn,$cartID,$userID);
+        createOrder($conn,$userID,$isDeliver,$name,$address,$postalcode,$locationID,$telephoneNumber,$orderDate);
+        emptyCart($conn,$userID);
     }
 
-    $cartOrders = getCartOrders($conn,$cartID);
-    
+    if(isset($_POST["change_amount"])){
+
+        $productID = $_GET["product_id"];
+        $newAmount = $_POST["change_amount"];
+
+        setLiterCartProduct($conn,$userID,$productID,$newAmount);
+    }
+
+    $cartOrders = getCartOrders($conn,$userID);
+    $locations = getLocations($conn);
+    $totalCost = calculateTotalCostsCart($conn,$userID);
     // INCOMPLETE
 ?>
 
@@ -121,6 +145,15 @@
                     <td>    
                         <?php echo $order["liter"];?>
                     </td>
+                    <td>
+                        <a href="">Verander aantal</a>
+                    </td>
+                    <td>
+                        <form action="cart.php?product_id=<?php echo $order["id"]?>" method="POST">
+                            <input type="number" name="change_amount" min=0 step=".01" placeholder="1.34">
+                            <input type="submit">
+                        </form>
+                    </td>
                 </tr>
             <?php }?>
         </tbody>
@@ -128,26 +161,32 @@
 
     <br>
     <form action="cart.php" method="POST">
-        <input type="radio" name="is_deliver" <?php if($cart["is_deliver"] == 1){?> checked <?php }?> required> Bezorgen
+        <input type="radio" name="is_deliver" required> Bezorgen
         <br>
-        <input type="radio" name="is_deliver" <?php if($cart["is_deliver"] == 0){?> checked <?php }?> required> Afhalen
+        <input type="radio" name="is_deliver" required> Afhalen
         <br>
-        <input type="text" placeholder="Naam" required>
+        <input type="text" placeholder="Naam" name="name" required>
         <br>
-        <input type="text" placeholder="Adres" required>
+        <input type="text" placeholder="Adres" name="address" required>
         <br>
-        <input type="text" placeholder="Postcode" required>
+        <input type="text" placeholder="Postcode" name="postalcode" required>
         <br>
-        <select name="" id="">
-            <option value="bruh">bruh</option>
+        <select name="location_id">
+            <?php foreach($locations as $location){?>
+                <option value="<?php echo $location["id"];?>"><?php echo $location["name"];?></option>
+            <?php }?>
         </select>
         <br>
-        <input type="text" placeholder="Adres" required>
+        <input type="text" placeholder="Telefoonnummer" name="telephone_number" required>
         <br>
         <input type="radio"> Aflever adres is hetzelfde als factuuradres
         <br>
-        <input type="date">
+        <input type="date" name="order_date">
         <input type="submit">
     </form>
+
+    <br>
+    <br>
+    Totale kosten: <?php echo $totalCost;?>
 </body>
 </html>

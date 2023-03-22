@@ -19,7 +19,10 @@
         $user = getUser($email,$conn);
 
         if((!empty($user) && password_verify($password,$user["password"]))){
+
             $_SESSION["user"] = $user;
+
+            header("location: user/index.php");
         }
         else{
             echo "login failed";

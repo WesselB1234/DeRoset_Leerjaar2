@@ -7,7 +7,7 @@
     <a href="login.php">Login</a>
 <?php }
 else {?>
-    <a href="login.php?logout=true">Logout <?php echo $_SESSION["user"]["email"] ?></a>
+    <a href="user/index.php">Mijn account <?php echo $_SESSION["user"]["email"] ?></a>
 <?php }?>
 
 <?php if(isset($_SESSION["user"]) && $_SESSION["user"]["role"] == "staff"){?>

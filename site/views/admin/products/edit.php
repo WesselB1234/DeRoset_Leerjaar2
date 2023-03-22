@@ -1,29 +1,33 @@
 <?php 
     require "../../../database.php";
+    require "../../../permissions.php";
 
-    if(!isset($_SESSION["user"]) or $_SESSION["user"]["role"] != "staff"){
-        header('location: ../index.php');
-    }
+    adminPermission();
 
     $product = null;
 
-    if(isset($_POST["name"]) && isset($_GET["id"])){
-        
-        $id = $_GET["id"];
-        $name = $_POST["name"];
-        $brand = $_POST["brand"];
-        $priceLiter = $_POST["price_liter"];
-        $description = $_POST["description"];
+    function updateProduct($conn,$productID,$name,$brand,$priceLiter,$description){
 
         $edit = $conn->prepare("UPDATE products SET name=:name,brand=:brand,price_liter=:price_liter,description=:description 
         WHERE id=:id");
 
-        $edit->bindParam("id",$id);
+        $edit->bindParam("id",$productID);
         $edit->bindParam("name",$name);
         $edit->bindParam("brand",$brand);
         $edit->bindParam("price_liter",$priceLiter);
         $edit->bindParam("description",$description);
         $edit->execute();
+    }
+
+    if(isset($_POST["name"]) && isset($_GET["id"])){
+        
+        $productID = $_GET["id"];
+        $name = $_POST["name"];
+        $brand = $_POST["brand"];
+        $priceLiter = $_POST["price_liter"];
+        $description = $_POST["description"];
+
+        updateProduct($conn,$productID,$name,$brand,$priceLiter,$description);
 
         header('location: index.php');
     }

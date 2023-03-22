@@ -1,16 +1,10 @@
 <?php 
     require "../../../database.php";
+    require "../../../permissions.php";
 
-    if(!isset($_SESSION["user"]) or $_SESSION["user"]["role"] != "staff"){
-        header('location: ../index.php');
-    }
+    adminPermission();
 
-    if(isset($_POST["name"])){
-        
-        $name = $_POST["name"];
-        $brand = $_POST["brand"];
-        $priceLiter = $_POST["price_liter"];
-        $description = $_POST["description"];
+    function createProduct($conn,$name,$brand,$priceLiter,$description){
 
         $create = $conn->prepare("INSERT INTO products(name,price_liter,description,brand,image) VALUES
         (:name,:price_liter,:description,:brand,null)");
@@ -20,6 +14,16 @@
         $create->bindParam("price_liter",$priceLiter);
         $create->bindParam("description",$description);
         $create->execute();
+    }
+
+    if(isset($_POST["name"])){
+        
+        $name = $_POST["name"];
+        $brand = $_POST["brand"];
+        $priceLiter = $_POST["price_liter"];
+        $description = $_POST["description"];
+
+        createProduct($conn,$name,$brand,$priceLiter,$description);        
 
         header('location: index.php');
     }

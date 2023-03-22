@@ -15,6 +15,18 @@
         return false;
     }
 
+    function createUser($conn,$username,$email,$role,$password){
+
+        $hashedPassword = password_hash($password,PASSWORD_DEFAULT);
+
+        $create = $conn->prepare("INSERT INTO users(email,username,role,password) VALUES(:email,:username,:role,:password)");
+        $create->bindParam("email",$email);
+        $create->bindParam("username",$username);
+        $create->bindParam("role",$role);
+        $create->bindParam("password",$hashedPassword);
+        $create->execute();
+    }
+
     if(isset($_POST["password"])){
         
         $username = $_POST["username"];
@@ -23,18 +35,8 @@
         $password = $_POST["password"]; 
 
         if(isDuplicate($email,$conn) == false){
-
             //filter!!!!!!!!!!!!!
-
-            $hashedPassword = password_hash($password,PASSWORD_DEFAULT);
-
-            $create = $conn->prepare("INSERT INTO users(email,username,role,password) VALUES(:email,:username,:role,:password)");
-            $create->bindParam("email",$email);
-            $create->bindParam("username",$username);
-            $create->bindParam("role",$role);
-            $create->bindParam("password",$hashedPassword);
-
-            $create->execute();
+            createUser($conn,$username,$email,$role,$password);
         }
         else{
             echo "email already exists";

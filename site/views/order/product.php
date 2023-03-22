@@ -19,42 +19,21 @@
         return false;
     }
 
-    function getCartFromUser($conn,$userID){
+    function setLiterCartProduct($conn,$userID,$productID,$liter){
 
-        $duplicate = $conn->prepare("SELECT * FROM carts WHERE user_id=:user_id");
-        $duplicate->bindParam("user_id",$userID);
-        $duplicate->execute();
-        $duplicate = $duplicate->fetch();
-
-        if(!empty($duplicate)){
-            return $duplicate;
-        }
-
-        return false;
-    }
-
-    function createCart($conn,$userID){
-
-        $createCart = $conn->prepare("INSERT INTO carts(user_id,is_deliver) VALUES (:user_id,false)");
-        $createCart->bindParam("user_id",$userID);
-        $createCart->execute();
-    }
-
-    function setLiterCartProduct($conn,$cartID,$productID,$liter){
-
-        $updateProductCart = $conn->prepare("UPDATE carts_products SET liter=:liter WHERE product_id=:product_id AND cart_id=:cart_id");
+        $updateProductCart = $conn->prepare("UPDATE carts_products SET liter=:liter WHERE product_id=:product_id AND user_id=:user_id");
         $updateProductCart->bindParam("liter",$liter);
         $updateProductCart->bindParam("product_id",$productID);
-        $updateProductCart->bindParam("cart_id",$cartID);
+        $updateProductCart->bindParam("user_id",$userID);
         $updateProductCart->execute();
     }
 
-    function createCartProduct($conn,$cartID,$productID,$liter){
+    function createCartProduct($conn,$userID,$productID,$liter){
 
-        $createProductCart = $conn->prepare("INSERT INTO carts_products(cart_id,product_id,liter) VALUES
-        (:cart_id,:product_id,:liter)");
+        $createProductCart = $conn->prepare("INSERT INTO carts_products(user_id,product_id,liter) VALUES
+        (:user_id,:product_id,:liter)");
             
-        $createProductCart->bindParam("cart_id",$cartID);
+        $createProductCart->bindParam("user_id",$userID);
         $createProductCart->bindParam("product_id",$productID);
         $createProductCart->bindParam("liter",$liter);
         $createProductCart->execute();
@@ -65,21 +44,12 @@
         $userID = $_SESSION["user"]["id"];
         $productID = $_GET["id"];
         $liter = $_POST["liter"];
-
-        $cart = getCartFromUser($conn,$userID);
-        $cartID = $cart["id"];
-
-        if($cart == false){
-    
-            createCart($conn,$userID);
-            $cart = getCartFromUser($conn,$userID);
-        }
         
         if(findDuplicateProductCart($conn,$productID) == false){
-            createCartProduct($conn,$cartID,$productID,$liter);
+            createCartProduct($conn,$userID,$productID,$liter);
         }
         else{
-            setLiterCartProduct($conn,$cartID,$productID,$liter);
+            setLiterCartProduct($conn,$userID,$productID,$liter);
         }
 
         header("location: index.php");

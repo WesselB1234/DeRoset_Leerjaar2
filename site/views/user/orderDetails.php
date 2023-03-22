@@ -7,7 +7,6 @@
     <title>Document</title>
 </head>
 <body>
-    <a href="activeOrders.php">Bekijk bestellingen</a>
-    <a href="settings.php">Gebruikers instellingen</a>
+    detail mate
 </body>
 </html>

@@ -7,6 +7,10 @@
     <title>Document</title>
 </head>
 <body>
-    
+    <form action="">
+        
+    </form>
+
+    <a href="../login.php?logout=true">Log uit</a>
 </body>
 </html>
