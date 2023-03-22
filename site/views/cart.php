@@ -146,13 +146,7 @@
                         <?php echo $order["liter"];?>
                     </td>
                     <td>
-                        <a href="">Verander aantal</a>
-                    </td>
-                    <td>
-                        <form action="cart.php?product_id=<?php echo $order["id"]?>" method="POST">
-                            <input type="number" name="change_amount" min=0 step=".01" placeholder="1.34">
-                            <input type="submit">
-                        </form>
+                        <button id="button<?php echo $order["id"]?>" onclick="insertValueChangeForm('<?php echo $order['id']?>',<?php echo $order['product_id']?>)">Verander</button>
                     </td>
                 </tr>
             <?php }?>
@@ -161,9 +155,9 @@
 
     <br>
     <form action="cart.php" method="POST">
-        <input type="radio" name="is_deliver" required> Bezorgen
+        <input type="radio" name="is_deliver" onchange="changeCostText(10)" required> Bezorgen
         <br>
-        <input type="radio" name="is_deliver" required> Afhalen
+        <input type="radio" name="is_deliver" onchange="changeCostText(0)" required> Afhalen
         <br>
         <input type="text" placeholder="Naam" name="name" required>
         <br>
@@ -187,6 +181,41 @@
 
     <br>
     <br>
-    Totale kosten: <?php echo $totalCost;?>
+    <span id="total_cost">Totale kosten: <?php echo $totalCost;?></span>
+
+    <script>
+        
+        let totalCost = <?php echo $totalCost;?>;
+        let costSpan = document.getElementById("total_cost");
+
+        function valueChangeForm(productID,JS_ID){
+           
+           return `<td>
+                <form id="valueChangerForm` + JS_ID.toString() + `" action="cart.php?product_id=` + productID.toString() + `" method="POST">
+                    <input type="number" name="change_amount" min=0 step=".01" placeholder="1.34">
+                    <input type="submit">
+                </form>
+            </td>`;
+        }
+        
+        function changeCostText(offset){
+            costSpan.innerHTML =  'Totale kosten: ' + (totalCost + offset).toString();  
+        }
+
+        function insertValueChangeForm(JS_ID,productID){
+
+            let button = document.getElementById("button" + JS_ID.toString())
+            let duplicate = document.getElementById("valueChangerForm" + JS_ID.toString())
+            let trTable = button.parentElement.parentElement;
+        
+            if(duplicate == null){
+                trTable.innerHTML += valueChangeForm(productID,JS_ID);
+            }
+            else{
+                duplicate.parentElement.remove();
+            }
+        }
+
+    </script>
 </body>
 </html>
