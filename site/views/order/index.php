@@ -1,9 +1,5 @@
 <?php 
     require "../../database.php";
-    
-    if(!isset($_SESSION["user"])){
-        header("location ../index.php");
-    }
 
     $products = $conn->prepare("SELECT * FROM products");
     $products->execute();
