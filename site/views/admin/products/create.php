@@ -4,29 +4,40 @@
 
     adminPermission();
 
-    function createProduct($conn,$name,$brand,$priceLiter,$description){
+    function createProduct($conn,$name,$brandID,$priceLiter,$description){
 
-        $create = $conn->prepare("INSERT INTO products(name,price_liter,description,brand,image) VALUES
-        (:name,:price_liter,:description,:brand,null)");
+        $create = $conn->prepare("INSERT INTO products(name,price_liter,description,brand_id,image) VALUES
+        (:name,:price_liter,:description,:brand_id,null)");
 
         $create->bindParam("name",$name);
-        $create->bindParam("brand",$brand);
+        $create->bindParam("brand_id",$brandID);
         $create->bindParam("price_liter",$priceLiter);
         $create->bindParam("description",$description);
         $create->execute();
     }
 
+    function getBrands($conn){
+
+        $brands = $conn->prepare("SELECT * FROM brands");
+        $brands->execute();
+        $brands = $brands->fetchAll();
+
+        return $brands;
+    }
+
     if(isset($_POST["name"])){
         
         $name = $_POST["name"];
-        $brand = $_POST["brand"];
+        $brandID = $_POST["brand_id"];
         $priceLiter = $_POST["price_liter"];
         $description = $_POST["description"];
 
-        createProduct($conn,$name,$brand,$priceLiter,$description);        
+        createProduct($conn,$name,$brandID,$priceLiter,$description);        
 
         header('location: index.php');
     }
+
+    $brands = getBrands($conn);
 ?>
 
 <!DOCTYPE html>
@@ -40,7 +51,13 @@
 <body>
     <form action="create.php" method="POST">
         <input type="text" name="name" placeholder="Naam">
-        <input type="text" name="brand" placeholder="Merk">
+
+        <select name="brand_id">
+            <?php foreach($brands as $brand){?>
+                <option value="<?php echo $brand["id"]?>"><?php echo $brand["name"];?></option>
+            <?php }?>
+        </select>
+        
         <input type="number" min=0 step=".01" name="price_liter" placeholder="1.34">
         <input type="file">
 

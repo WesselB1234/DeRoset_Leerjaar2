@@ -4,30 +4,40 @@
 
     adminPermission();
 
-    $product = null;
+    function updateProduct($conn,$productID,$name,$brandID,$priceLiter,$description){
 
-    function updateProduct($conn,$productID,$name,$brand,$priceLiter,$description){
-
-        $edit = $conn->prepare("UPDATE products SET name=:name,brand=:brand,price_liter=:price_liter,description=:description 
+        $edit = $conn->prepare("UPDATE products SET name=:name,brand_id=:brand_id,price_liter=:price_liter,description=:description 
         WHERE id=:id");
 
         $edit->bindParam("id",$productID);
         $edit->bindParam("name",$name);
-        $edit->bindParam("brand",$brand);
+        $edit->bindParam("brand_id",$brandID);
         $edit->bindParam("price_liter",$priceLiter);
         $edit->bindParam("description",$description);
         $edit->execute();
     }
 
+    function getBrands($conn){
+
+        $brands = $conn->prepare("SELECT * FROM brands");
+        $brands->execute();
+        $brands = $brands->fetchAll();
+
+        return $brands;
+    }
+
+    $product = null;
+    $brands = getBrands($conn);
+
     if(isset($_POST["name"]) && isset($_GET["id"])){
         
         $productID = $_GET["id"];
         $name = $_POST["name"];
-        $brand = $_POST["brand"];
+        $brandID = $_POST["brand_id"];
         $priceLiter = $_POST["price_liter"];
         $description = $_POST["description"];
 
-        updateProduct($conn,$productID,$name,$brand,$priceLiter,$description);
+        updateProduct($conn,$productID,$name,$brandID,$priceLiter,$description);
 
         header('location: index.php');
     }
@@ -36,7 +46,9 @@
 
         $id = $_GET["id"];
 
-        $product = $conn->prepare("SELECT * FROM products WHERE id = :id");
+        $product = $conn->prepare("SELECT products.id,products.name,products.price_liter,products.description,products.brand_id,brands.name as 'brand_name'
+        FROM products JOIN brands ON brands.id = products.brand_id WHERE products.id = :id");
+
         $product->bindParam("id",$id);
         $product->execute();
         $product = $product->fetch();
@@ -57,7 +69,14 @@
 <body>
     <form action="edit.php?id=<?php echo $product["id"];?>" method="POST">
         <input type="text" name="name" placeholder="Naam" value="<?php echo $product["name"];?>">
-        <input type="text" name="brand" placeholder="Merk" value="<?php echo $product["brand"];?>">
+        
+        <select name="brand_id">
+            <option value="<?php echo $product["brand_id"]?>" selected><?php echo $product["brand_name"]?></option>
+            <?php foreach($brands as $brand){?>
+                <option value="<?php echo $brand["id"]?>"><?php echo $brand["name"];?></option>
+            <?php }?>
+        </select>
+
         <input type="number" min=0 step=".01" name="price_liter" placeholder="1.34" value="<?php echo $product["price_liter"];?>">
         <input type="file">
 
