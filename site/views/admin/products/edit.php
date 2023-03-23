@@ -4,9 +4,19 @@
 
     adminPermission();
 
-    function updateProduct($conn,$productID,$name,$brandID,$priceLiter,$description){
+    function getProduct($conn,$productID){
 
-        $edit = $conn->prepare("UPDATE products SET name=:name,brand_id=:brand_id,price_liter=:price_liter,description=:description 
+        $select = $conn->prepare("SELECT * FROM products WHERE id=:product_id");
+        $select->bindParam("product_id",$productID);
+        $select->execute();
+        $select = $select->fetch();
+
+        return $select;
+    }
+
+    function updateProduct($conn,$productID,$name,$brandID,$priceLiter,$description,$imageFile){
+
+        $edit = $conn->prepare("UPDATE products SET name=:name,brand_id=:brand_id,price_liter=:price_liter,description=:description,image=:image 
         WHERE id=:id");
 
         $edit->bindParam("id",$productID);
@@ -14,6 +24,24 @@
         $edit->bindParam("brand_id",$brandID);
         $edit->bindParam("price_liter",$priceLiter);
         $edit->bindParam("description",$description);
+
+        if($imageFile == null){
+
+            $product = getProduct($conn,$productID);
+
+            $edit->bindParam("image",$product["image"]);
+        }
+        else{
+            $fileTemp = $imageFile['tmp_name'];
+            $fileName = $imageFile["name"];
+            $ext = pathinfo($fileName, PATHINFO_EXTENSION);
+            $toFileName = "product".strval($productID).".". $ext;
+
+            $edit->bindParam("image",$toFileName);
+
+            move_uploaded_file($fileTemp, "../../../images/products/".$toFileName);
+        }
+
         $edit->execute();
     }
 
@@ -36,8 +64,13 @@
         $brandID = $_POST["brand_id"];
         $priceLiter = $_POST["price_liter"];
         $description = $_POST["description"];
+        $imageFile = null;  
 
-        updateProduct($conn,$productID,$name,$brandID,$priceLiter,$description);
+        if(strlen($_FILES["image"]["tmp_name"]) > 0){
+            $imageFile = $_FILES["image"];
+        }
+    
+        updateProduct($conn,$productID,$name,$brandID,$priceLiter,$description,$imageFile);
 
         header('location: index.php');
     }
@@ -67,7 +100,7 @@
     <title>Document</title>
 </head>
 <body>
-    <form action="edit.php?id=<?php echo $product["id"];?>" method="POST">
+    <form action="edit.php?id=<?php echo $product["id"];?>" method="POST" enctype="multipart/form-data">
         <input type="text" name="name" placeholder="Naam" value="<?php echo $product["name"];?>">
         
         <select name="brand_id">
@@ -78,7 +111,7 @@
         </select>
 
         <input type="number" min=0 step=".01" name="price_liter" placeholder="1.34" value="<?php echo $product["price_liter"];?>">
-        <input type="file">
+        <input type="file" name="image">
 
         <textarea name="description" id="" cols="30" rows="10" placeholder="">
             <?php echo $product["description"];?>

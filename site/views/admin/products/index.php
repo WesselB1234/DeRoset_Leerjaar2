@@ -1,9 +1,8 @@
 <?php 
     require "../../../database.php";
+    require "../../../permissions.php";
 
-    if(!isset($_SESSION["user"]) or $_SESSION["user"]["role"] != "staff"){
-        header('location: ../index.php');
-    }
+    adminPermission();
 
     if(isset($_GET["delete"])){
 
@@ -14,7 +13,7 @@
         $delete->execute();
     }
 
-    $products = $conn->prepare("SELECT * FROM products");
+    $products = $conn->prepare("SELECT *,brands.name as 'brand_name' FROM products JOIN brands on brands.id = products.brand_id");
     $products->execute();
     $products = $products->fetchAll();
 ?>
@@ -58,7 +57,7 @@
                     <?php echo $product["price_liter"];?>
                 </td>
                 <td>
-                    <?php echo $product["brand"];?>
+                    <?php echo $product["brand_name"];?>
                 </td>
                 <td>
                     <a href="edit.php?id=<?php echo $product["id"];?>">Verander</a>

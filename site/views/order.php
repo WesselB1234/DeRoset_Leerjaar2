@@ -67,12 +67,14 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/order.css">
     <title>Document</title>
 </head>
 <body>
     <?php foreach($products as $product) {?>
-        <a href="order.php?product_id=<?php echo $product["id"]?>"><?php echo $product["name"]?></a>
-        <br>
+        <a href="order.php?product_id=<?php echo $product["id"]?>"><?php echo $product["name"]?>
+            <img class ="productImage" src="../images/products/<?php echo $product["image"];?>">
+        </a>
     <?php }?>
 </body>
 </html>
