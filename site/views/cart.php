@@ -11,7 +11,7 @@
         $deleteCart->execute();
     }
     
-    function getCartOrders($conn,$userID){
+    function getCartProducts($conn,$userID){
         
         $cartOrders = $conn->prepare("SELECT *,products.name as product_name FROM carts_products
         JOIN products ON products.id = carts_products.product_id
@@ -35,7 +35,7 @@
 
     function createOrder($conn,$userID,$isDeliver,$name,$address,$postalcode,$locationID,$telephoneNumber,$orderDate){
         
-        $cartOrders = getCartOrders($conn,$userID); 
+        $cartOrders = getCartProducts($conn,$userID); 
 
         $createOrder = $conn->prepare("INSERT INTO orders(user_id,is_deliver,name,address,postalcode,location_id,telephone_number,order_date) 
         VALUES (:user_id,:is_deliver,:name,:address,:postalcode,:location_id,:telephone_number,:order_date)");
@@ -88,20 +88,34 @@
         $updateProductCart->execute();
     }
 
+    function deleteCartProduct($conn,$userID,$productID){
+
+        $delete = $conn->prepare("DELETE FROM carts_products WHERE user_id=:user_id AND product_id=:product_id");
+        $delete->bindParam("product_id",$productID);
+        $delete->bindParam("user_id",$userID);
+        $delete->execute();
+    }
+
     $userID = $_SESSION["user"]["id"];
     
     if(isset($_POST["is_deliver"])){
         
-        $isDeliver = $_POST["is_deliver"];
-        $name = $_POST["name"];
-        $address = $_POST["address"];
-        $postalcode = $_POST["postalcode"];
-        $locationID = $_POST["location_id"];
-        $telephoneNumber = $_POST["telephone_number"];
-        $orderDate = $_POST["order_date"];
+        if(count(getCartProducts($conn,$userID)) > 0){
 
-        createOrder($conn,$userID,$isDeliver,$name,$address,$postalcode,$locationID,$telephoneNumber,$orderDate);
-        emptyCart($conn,$userID);
+            $isDeliver = $_POST["is_deliver"];
+            $name = $_POST["name"];
+            $address = $_POST["address"];
+            $postalcode = $_POST["postalcode"];
+            $locationID = $_POST["location_id"];
+            $telephoneNumber = $_POST["telephone_number"];
+            $orderDate = $_POST["order_date"];
+
+            createOrder($conn,$userID,$isDeliver,$name,$address,$postalcode,$locationID,$telephoneNumber,$orderDate);
+            emptyCart($conn,$userID);
+        }
+        else{
+            echo "cart empty mate";
+        }
     }
 
     if(isset($_POST["change_amount"])){
@@ -109,13 +123,17 @@
         $productID = $_GET["product_id"];
         $newAmount = $_POST["change_amount"];
 
-        setLiterCartProduct($conn,$userID,$productID,$newAmount);
+        if($newAmount > 0){
+            setLiterCartProduct($conn,$userID,$productID,$newAmount);
+        }
+        else{
+            deleteCartProduct($conn,$userID,$productID);
+        }
     }
 
-    $cartOrders = getCartOrders($conn,$userID);
+    $cartOrders = getCartProducts($conn,$userID);
     $locations = getLocations($conn);
     $totalCost = calculateTotalCostsCart($conn,$userID);
-    // INCOMPLETE
 ?>
 
 <!DOCTYPE html>
@@ -173,8 +191,6 @@
         <br>
         <input type="text" placeholder="Telefoonnummer" name="telephone_number" required>
         <br>
-        <input type="radio"> Aflever adres is hetzelfde als factuuradres
-        <br>
         <input type="date" name="order_date">
         <input type="submit">
     </form>
@@ -183,8 +199,7 @@
     <br>
     <span id="total_cost">Totale kosten: <?php echo $totalCost;?></span>
 
-    <script>
-        
+    <script>     
         let totalCost = <?php echo $totalCost;?>;
         let costSpan = document.getElementById("total_cost");
 

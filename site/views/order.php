@@ -1,5 +1,5 @@
 <?php 
-    require "../../database.php";
+    require "../database.php";
 
     function findDuplicateProductCart($conn,$productID){
 
@@ -53,8 +53,6 @@
             else{
                 setLiterCartProduct($conn,$userID,$productID,$duplicate["liter"] + $liter);
             }
-
-            header("location: index.php");
         }
     }
 
@@ -73,7 +71,7 @@
 </head>
 <body>
     <?php foreach($products as $product) {?>
-        <a href="index.php?product_id=<?php echo $product["id"]?>"><?php echo $product["name"]?></a>
+        <a href="order.php?product_id=<?php echo $product["id"]?>"><?php echo $product["name"]?></a>
         <br>
     <?php }?>
 </body>
