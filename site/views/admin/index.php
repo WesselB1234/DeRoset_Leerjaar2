@@ -3,9 +3,7 @@
     require '../../database.php';
     require '../../permissions.php';
 
-    adminPermission()
-
-    
+    adminPermission();
 ?>
 
 <!DOCTYPE html>
@@ -22,5 +20,6 @@
     <a href="orders/index.php">View orders</a>
     <a href="products/index.php">View products</a>
     <a href="tops/index.php">View tops</a>
+    <a href="users/index.php">View Users</a>
 </body>
 </html>

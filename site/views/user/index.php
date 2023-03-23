@@ -1,3 +1,12 @@
+<?php 
+    require "../../database.php";
+    require "../../permissions.php";
+
+    userPermission();
+
+    $user = $_SESSION["user"];
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,6 +16,8 @@
     <title>Document</title>
 </head>
 <body>
+    <h2><?php echo $user["username"];?></h2>
+
     <a href="activeOrders.php">Bekijk bestellingen</a>
     <a href="settings.php">Gebruikers instellingen</a>
 </body>

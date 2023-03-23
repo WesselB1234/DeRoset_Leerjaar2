@@ -15,6 +15,16 @@
         return false;
     }
 
+    function getUser($conn,$userID){
+        
+        $user = $conn->prepare("SELECT * FROM users WHERE id=:id");
+        $user->bindParam("id",$userID);
+        $user->execute();
+        $user = $user->fetch();
+
+        return $user;
+    }
+
     function createUser($conn,$username,$email,$role,$password){
 
         $hashedPassword = password_hash($password,PASSWORD_DEFAULT);
@@ -25,6 +35,11 @@
         $create->bindParam("role",$role);
         $create->bindParam("password",$hashedPassword);
         $create->execute();
+
+        $userID = $conn->lastInsertId();
+        $user = getUser($conn,$userID);
+
+        return $user;
     }
 
     if(isset($_POST["password"])){
@@ -36,7 +51,10 @@
 
         if(isDuplicate($email,$conn) == false){
             //filter!!!!!!!!!!!!!
-            createUser($conn,$username,$email,$role,$password);
+            $user = createUser($conn,$username,$email,$role,$password);
+            $_SESSION["user"] = $user;
+
+            header("location: user/index.php");
         }
         else{
             echo "email already exists";
