@@ -1,8 +1,8 @@
 <?php
     include "../../database.php";
     
-    if(!isset($_GET["id"]) or !isset($_SESSION["user"])){
-        header("location: index.php");
+    if(!isset($_GET["product_id"]) or !isset($_SESSION["user"])){
+        header("location: ../login.php");
     }   
 
     function findDuplicateProductCart($conn,$productID){
@@ -55,9 +55,9 @@
         header("location: index.php");
     }
 
-    $id = $_GET["id"];
-    $product = $conn->prepare("SELECT * FROM products WHERE id= :id");
-    $product->bindParam("id",$id);
+    $productID = $_GET["product_id"];
+    $product = $conn->prepare("SELECT * FROM products WHERE id= :product_id");
+    $product->bindParam("product_id",$productID);
     $product->execute();
     $product = $product->fetch();
     
