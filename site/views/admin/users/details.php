@@ -28,6 +28,10 @@
 
         $userID = $_GET["user_id"];
         $user = getUser($conn,$userID);
+        
+        if(empty($user)){
+            header("location: index.php");
+        }
     }
     else if(isset($_GET["delete"])){
 
