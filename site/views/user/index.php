@@ -27,7 +27,7 @@
     <title>Document</title>
 </head>
 <body>
-    <a href="activeOrders.php">Bekijk bestellingen</a>
+    <a href="orders/index.php">Bekijk bestellingen</a>
     <a href="settings.php">Gebruikers instellingen</a>
 </body>
 </html>

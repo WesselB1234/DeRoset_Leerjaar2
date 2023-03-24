@@ -203,7 +203,7 @@
 
     <br>
     <br>
-    <span id="total_cost">Totale kosten: <?php echo $totalCost;?></span>
+    <span id="total_cost">Totale kosten: € <?php echo $totalCost;?></span>
 
     <script>     
         let totalCost = <?php echo $totalCost;?>;

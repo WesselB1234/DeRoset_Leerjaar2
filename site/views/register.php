@@ -1,7 +1,7 @@
 <?php 
     require "../database.php";
 
-    function isDuplicate($email,$conn){
+    function isDuplicate($conn,$email){
         
         $duplicate = $conn->prepare("SELECT * FROM users WHERE email = :email");
         $duplicate->bindParam('email',$email);
@@ -49,7 +49,7 @@
         $role = "user";
         $password = $_POST["password"]; 
 
-        if(isDuplicate($email,$conn) == false){
+        if(isDuplicate($conn,$email) == false){
             //filter!!!!!!!!!!!!!
             $user = createUser($conn,$username,$email,$role,$password);
             $_SESSION["user"] = $user;

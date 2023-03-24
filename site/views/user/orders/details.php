@@ -6,7 +6,7 @@
         header("location: index.php");
     }
     else{
-        adminPermission();
+        userPermission();
     }
 
     function getUser($conn,$userID){
@@ -67,7 +67,7 @@
         $totalCost = $totalCost->fetch()["total_cost"];
         
         if($is_deliver == 1){
-            $totalCost += 10;
+            $totalCost+=10;
         }
 
         return $totalCost;
@@ -93,7 +93,7 @@
 
     $totalCost = calculateTotalCostsOrder($conn,$order["is_deliver"],$orderID);
 
-    $userID = $order["user_id"];
+    $userID = $_SESSION["user"]["id"];
     $user = getUser($conn,$userID);
 
     echo $totalCost;
@@ -136,10 +136,8 @@
     
     <h4>Totale kost: € <?php echo $totalCost;?></h4>
 
-    <?php if($order["is_collected"] == 0 && $order["is_canceled"] == 0){?>
-        <a href="details.php?id=<?php echo $order["id"];?>&collected=true">Compleet</a>
-    <?php }
-    else if($order["is_canceled"] == 0){
+   
+    <?php if($order["is_collected"] == 1){
     ?>
         Completed
     <?php }?>
@@ -148,7 +146,7 @@
     <?php if($order["is_canceled"] == 0 && $order["is_collected"] == 0){?>
         <a href="details.php?id=<?php echo $order["id"];?>&cancel=true">Annuleer</a>
     <?php }
-    else if($order["is_collected"] == 0){
+    else if($order["is_canceled"] == 1){
     ?>
         geanuleerd
     <?php }?>

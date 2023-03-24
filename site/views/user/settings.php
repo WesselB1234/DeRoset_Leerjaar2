@@ -4,6 +4,16 @@
 
     userPermission();
 
+    function getUser($conn,$email){
+        
+        $user = $conn->prepare("SELECT * FROM users WHERE email=:email");
+        $user->bindParam("email",$email);
+        $user->execute();
+        $user = $user->fetch();
+
+        return $user;
+    }
+
     function deleteUser($conn,$userID){
         
         $delete = $conn->prepare("DELETE FROM users WHERE id=:id");
@@ -23,10 +33,6 @@
         notify("Gebruikersnaam veranderd");
     }
 
-    function changeUserLocations($conn,$userID,$name){
-        // MAKE!!!
-    }
-
     function changeUserPassword($conn,$userID,$password){
 
         $hashedPassword = password_hash($password,PASSWORD_DEFAULT);
@@ -37,6 +43,24 @@
         $update->execute();
 
         notify("Wachtwoord veranderd");
+    }
+
+    function changeUserEmail($conn,$userID,$email){
+
+        $duplicateUser = getUser($conn,$email);
+
+        if(empty($duplicateUser)){
+
+            $update = $conn->prepare("UPDATE users SET email=:email WHERE id=:id");
+            $update->bindParam("id",$userID);
+            $update->bindParam("email",$email);
+            $update->execute();
+
+            notify("Email successfully updated");
+        }
+        else{
+            notify("Email already exists");
+        }
     }
 
     function notify($message){
@@ -51,14 +75,20 @@
         setUserName($conn,$userID,$name);
     }
 
-    if(isset($_GET["delete"])){
-        deleteUser($conn,$userID);
+    if(isset($_POST["email"])){
+
+        $email = $_POST["email"];
+        changeUserEmail($conn,$userID,$email);
     }
 
     if(isset($_POST["password"])){
         
         $password = $_POST["password"];
         changeUserPassword($conn,$userID,$password);
+    }
+    
+    if(isset($_GET["delete"])){
+        deleteUser($conn,$userID);
     }
 ?>
 
@@ -71,18 +101,20 @@
     <title>Document</title>
 </head>
 <body>
+
     verander gebruikersnaam
     <form action="settings.php" method="POST">
-        <input type="text" name="username" required>
+        <input type="text" name="username" required placeholder="Gebruikersnaam">
         <input type="submit">
     </form>
-    <br>
 
-    verander address
-    <form action="">
-        <input type="text" required>
+    <br>
+    verander email
+    <form action="settings.php" method="POST">
+        <input type="text" name="email" required placeholder="Email">
         <input type="submit">
     </form>
+
     <br>
     verander wachtwoord
     <form action="settings.php" method="POST">
