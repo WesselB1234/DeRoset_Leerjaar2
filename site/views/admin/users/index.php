@@ -50,7 +50,7 @@
                         <?php echo $user["email"];?>
                     </td>
                     <td>
-                        <a href="details.php?user_id=<?php echo $user["id"];?>">Bekijk details</a>
+                        <a href="details.php?id=<?php echo $user["id"];?>">Bekijk details</a>
                     </td>
                 </tr>
             <?php }?>

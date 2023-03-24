@@ -4,10 +4,20 @@
 
     userPermission();
 
-    function getUser($conn,$email){
+    function getUserByMail($conn,$email){
         
         $user = $conn->prepare("SELECT * FROM users WHERE email=:email");
         $user->bindParam("email",$email);
+        $user->execute();
+        $user = $user->fetch();
+
+        return $user;
+    }
+
+    function getUserByID($conn,$userID){
+        
+        $user = $conn->prepare("SELECT * FROM users WHERE id=:id");
+        $user->bindParam("id",$userID);
         $user->execute();
         $user = $user->fetch();
 
@@ -33,34 +43,52 @@
         notify("Gebruikersnaam veranderd");
     }
 
-    function changeUserPassword($conn,$userID,$password){
+    function changeUserPassword($conn,$userID,$oldPassword,$newPassword){
 
-        $hashedPassword = password_hash($password,PASSWORD_DEFAULT);
+        $user = getUserByID($conn,$userID);
 
-        $update = $conn->prepare("UPDATE users SET password=:password WHERE id=:id");
-        $update->bindParam("password",$hashedPassword);
-        $update->bindParam("id",$userID);
-        $update->execute();
+        if(password_verify($oldPassword,$user["password"])){
 
-        notify("Wachtwoord veranderd");
+            $hashedPassword = password_hash($newPassword,PASSWORD_DEFAULT);
+
+            $update = $conn->prepare("UPDATE users SET password=:password WHERE id=:id");
+            $update->bindParam("password",$hashedPassword);
+            $update->bindParam("id",$userID);
+            $update->execute();
+
+            notify("Wachtwoord veranderd");
+        }
+        else{
+            notify("Oude wachtwoord niet gelijk");
+        }
     }
 
     function changeUserEmail($conn,$userID,$email){
 
-        $duplicateUser = getUser($conn,$email);
+        if(validateEmail($email)){
 
-        if(empty($duplicateUser)){
+            $duplicateUser = getUserByMail($conn,$email);
 
-            $update = $conn->prepare("UPDATE users SET email=:email WHERE id=:id");
-            $update->bindParam("id",$userID);
-            $update->bindParam("email",$email);
-            $update->execute();
+            if(empty($duplicateUser)){
 
-            notify("Email successfully updated");
+                $update = $conn->prepare("UPDATE users SET email=:email WHERE id=:id");
+                $update->bindParam("id",$userID);
+                $update->bindParam("email",$email);
+                $update->execute();
+
+                notify("Email successfully updated");
+            }
+            else{
+                notify("Email already exists");
+            }
         }
         else{
-            notify("Email already exists");
+            notify("Not a valid email");
         }
+    }
+
+    function validateEmail($email){
+        return filter_var($email,FILTER_VALIDATE_EMAIL);
     }
 
     function notify($message){
@@ -68,7 +96,7 @@
     }   
 
     $userID = $_SESSION["user"]["id"];
-
+    
     if(isset($_POST["username"])){
 
         $name = $_POST["username"];
@@ -81,15 +109,19 @@
         changeUserEmail($conn,$userID,$email);
     }
 
-    if(isset($_POST["password"])){
+    if(isset($_POST["old_password"])){
         
-        $password = $_POST["password"];
-        changeUserPassword($conn,$userID,$password);
+        $oldPassword = $_POST["old_password"];
+        $newPassword = $_POST["new_password"];
+
+        changeUserPassword($conn,$userID,$oldPassword,$newPassword);
     }
     
     if(isset($_GET["delete"])){
         deleteUser($conn,$userID);
     }
+    
+    $user = getUserByID($conn,$userID);
 ?>
 
 <!DOCTYPE html>
@@ -104,28 +136,30 @@
 
     verander gebruikersnaam
     <form action="settings.php" method="POST">
-        <input type="text" name="username" required placeholder="Gebruikersnaam">
+        <input type="text" name="username" required placeholder="Gebruikersnaam" value="<?php echo $user["username"];?>">
         <input type="submit">
     </form>
 
     <br>
     verander email
     <form action="settings.php" method="POST">
-        <input type="text" name="email" required placeholder="Email">
+        <input type="text" name="email" required placeholder="Email" value="<?php echo $user["email"];?>">
         <input type="submit">
     </form>
 
     <br>
     verander wachtwoord
     <form action="settings.php" method="POST">
-        <input type="password" id="password" name="password" required placeholder="Password" onchange="validatePassword()">
-        <input type="password" id="confirm_password" required placeholder="Repeat password" onchange="validatePassword()">
+        <input type="password" name="old_password" required placeholder="Oude wachtwoord">
+        <input type="password" id="password" name="new_password" required placeholder="Nieuwe wachtwoord" onchange="validatePassword()">
+        <input type="password" id="confirm_password" required placeholder="Herhaal nieuwe wachtwoord" onchange="validatePassword()">
         <input type="submit">
     </form>
 
-    <a href="settings.php?delete=true">Verwijder account</a>
-    <br>
     <a href="../login.php?logout=true">Log uit</a>
+    <br>
+    <br>
+    <a href="settings.php?delete=true">Verwijder account</a>
 
     <script>
         var password = document.getElementById("password")

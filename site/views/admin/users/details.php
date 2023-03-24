@@ -1,8 +1,22 @@
 <?php 
     require "../../../database.php";
     require "../../../permissions.php";
+    
+    $userID = null;
+    $user = null;
 
-    adminPermission();
+    if(isset($_GET["id"])){
+
+        $userID = $_GET["id"];
+        $user = getUser($conn,$userID);
+        
+        if(empty($user)){
+            header("location: index.php");
+        }
+    }
+    else{
+        adminPermission();
+    }
 
     function deleteUser($conn,$userID){
         
@@ -21,27 +35,22 @@
         return $user;
     }   
 
-    $userID = null;
-    $user = null;
+    if(isset($_GET["id"])){
 
-    if(isset($_GET["user_id"])){
-
-        $userID = $_GET["user_id"];
+        $userID = $_GET["id"];
         $user = getUser($conn,$userID);
         
         if(empty($user)){
             header("location: index.php");
         }
     }
-    else if(isset($_GET["delete"])){
+
+    if(isset($_GET["delete"])){
 
         $userID = $_GET["delete"];
         
         deleteUser($conn,$userID);
 
-        header("location: index.php");
-    }
-    else{
         header("location: index.php");
     }
 ?>

@@ -15,8 +15,6 @@
         $create->bindParam("description",$description);
         $create->execute();
 
-        // set image
-
         $productID = $conn->lastInsertId();
 
         $fileTemp = $imageFile['tmp_name'];

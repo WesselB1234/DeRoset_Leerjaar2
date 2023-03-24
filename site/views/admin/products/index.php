@@ -13,7 +13,7 @@
         $delete->execute();
     }
 
-    $products = $conn->prepare("SELECT *,brands.name as 'brand_name' FROM products JOIN brands on brands.id = products.brand_id");
+    $products = $conn->prepare("SELECT *,products.name as 'product_name',products.id as 'product_id',brands.name as 'brand_name' FROM products JOIN brands on brands.id = products.brand_id");
     $products->execute();
     $products = $products->fetchAll();
 ?>
@@ -48,10 +48,10 @@
             <?php foreach($products as $product){?>
             <tr>
                 <td>
-                    <?php echo $product["id"];?>
+                    <?php echo $product["product_id"];?>
                 </td>
                 <td>
-                    <?php echo $product["name"];?>
+                    <?php echo $product["product_name"];?>
                 </td>
                 <td>
                     € <?php echo $product["price_liter"];?>
@@ -60,10 +60,10 @@
                     <?php echo $product["brand_name"];?>
                 </td>
                 <td>
-                    <a href="edit.php?id=<?php echo $product["id"];?>">Verander</a>
+                    <a href="edit.php?id=<?php echo $product["product_id"];?>">Verander</a>
                 </td>
                 <td>
-                    <a href="index.php?delete=<?php echo$product["id"];?>">Verwijder</a>
+                    <a href="index.php?delete=<?php echo$product["product_id"];?>">Verwijder</a>
                 </td>
             </tr>
             <?php }?>

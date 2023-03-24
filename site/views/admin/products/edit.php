@@ -6,7 +6,10 @@
 
     function getProduct($conn,$productID){
 
-        $select = $conn->prepare("SELECT * FROM products WHERE id=:product_id");
+        $select = $conn->prepare("SELECT *,products.id as 'product_id',products.name as 'product_name',brands.name as 'brand_name' FROM products 
+        JOIN brands ON brands.id = products.brand_id
+        WHERE products.id=:product_id");
+
         $select->bindParam("product_id",$productID);
         $select->execute();
         $select = $select->fetch();
@@ -77,14 +80,12 @@
 
     if(isset($_GET["id"])){
 
-        $id = $_GET["id"];
+        $productID = $_GET["id"];
+        $product = getProduct($conn,$productID);
 
-        $product = $conn->prepare("SELECT products.id,products.name,products.price_liter,products.description,products.brand_id,brands.name as 'brand_name'
-        FROM products JOIN brands ON brands.id = products.brand_id WHERE products.id = :id");
-
-        $product->bindParam("id",$id);
-        $product->execute();
-        $product = $product->fetch();
+        if(empty($product)){
+            header('location: index.php');
+        }
     }
     else{
         header('location: index.php');
@@ -100,8 +101,8 @@
     <title>Document</title>
 </head>
 <body>
-    <form action="edit.php?id=<?php echo $product["id"];?>" method="POST" enctype="multipart/form-data">
-        <input type="text" name="name" placeholder="Naam" value="<?php echo $product["name"];?>">
+    <form action="edit.php?id=<?php echo $product["product_id"];?>" method="POST" enctype="multipart/form-data">
+        <input type="text" name="name" placeholder="Naam" value="<?php echo $product["product_name"];?>">
         
         <select name="brand_id">
             <option value="<?php echo $product["brand_id"]?>" selected><?php echo $product["brand_name"]?></option>
