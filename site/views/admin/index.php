@@ -3,7 +3,7 @@
     require '../../database.php';
     require '../../permissions.php';
 
-    adminPermission();
+    adminPermission("../login.php");
 ?>
 
 <!DOCTYPE html>

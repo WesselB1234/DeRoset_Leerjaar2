@@ -63,7 +63,7 @@
         else if(ValidateEmail($email) && isDuplicate($conn,$email) == false){
 
             $user = createUser($conn,$username,$email,$role,$password);
-            $_SESSION["user"]["id"] = $user["id"];
+            $_SESSION["user"] = $user;
 
             header("location: user/index.php");
         }

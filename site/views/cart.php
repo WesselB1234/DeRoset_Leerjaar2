@@ -2,7 +2,7 @@
     include "../database.php";
     include "../permissions.php";
 
-    userPermission();
+    userPermission("login.php"); 
 
     function emptyCart($conn,$userID){
         

@@ -2,8 +2,8 @@
     require "../../database.php";
     require "../../permissions.php";
 
-    adminPermission();
-
+    adminPermission("../login.php");
+    
     function getDailyTop($conn){
         
         $daily = $conn->prepare("SELECT *,products.name as 'product_name',tops_products.id as 'top_id',brands.name as 'brand_name' FROM tops_products 

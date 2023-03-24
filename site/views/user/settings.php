@@ -2,7 +2,7 @@
     require "../../database.php";
     require "../../permissions.php";
 
-    userPermission();
+    userPermission("../login.php"); 
 
     function getUserByMail($conn,$email){
         

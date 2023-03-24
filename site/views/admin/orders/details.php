@@ -6,7 +6,7 @@
         header("location: index.php");
     }
     else{
-        adminPermission();
+        adminPermission("../../login.php");
     }
 
     function getUser($conn,$userID){
@@ -21,7 +21,10 @@
 
     function getOrder($conn,$orderID){
         
-        $order = $conn->prepare("SELECT * FROM orders WHERE id=:order_id");
+        $order = $conn->prepare("SELECT *,orders.name as 'order_name',orders.id as 'order_id',locations.name as 'location_name'FROM orders
+        JOIN locations on locations.id = orders.location_id 
+        WHERE orders.id=:order_id");
+
         $order->bindParam("order_id",$orderID);
         $order->execute();
         $order = $order->fetch();
@@ -96,7 +99,7 @@
     $userID = $order["user_id"];
     $user = getUser($conn,$userID);
 
-    echo $totalCost;
+    $deliverArray = [0 => "Afhalen",1 => "Bezorgen"];
 ?>
 
 <!DOCTYPE html>
@@ -110,7 +113,7 @@
 <body>
     <table>
         <br>
-        <h2>Bestelling: <?php echo $order["name"];?></h2>
+        <h2>Bestelling: <?php echo $order["order_name"];?></h2>
         <h2> <a href="../users/details.php?user_id=<?php echo $user["id"];?>"><?php echo $user["username"];?></a></h2>
         <thead>
             <th>Name</th>

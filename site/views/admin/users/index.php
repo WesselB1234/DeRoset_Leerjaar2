@@ -2,7 +2,7 @@
     require "../../../database.php";
     require "../../../permissions.php";
 
-    adminPermission();
+    adminPermission("../../login.php");
 
     function getUsers($conn){
 

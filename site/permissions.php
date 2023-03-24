@@ -1,15 +1,16 @@
 <?php
-    function adminPermission(){
+    function adminPermission($directory){
         
         if(!isset($_SESSION["user"]) or $_SESSION["user"]["role"] != "staff"){
-            header('location: ../login.php');
+
+            header('location: '.$directory);
         }
     }
     
-    function userPermission(){
+    function userPermission($directory){
         
         if(!isset($_SESSION["user"])){
-            header('location: ../login.php');
+            header('location: '.$directory);
         }
     }
 ?>

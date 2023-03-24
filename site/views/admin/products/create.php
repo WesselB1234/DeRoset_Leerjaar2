@@ -2,7 +2,7 @@
     require "../../../database.php";
     require "../../../permissions.php";
 
-    adminPermission();
+    adminPermission("../../login.php");
 
     function createProduct($conn,$name,$brandID,$priceLiter,$description,$imageFile){
     

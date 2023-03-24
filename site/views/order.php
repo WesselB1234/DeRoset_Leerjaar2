@@ -38,7 +38,7 @@
     if(isset($_GET["product_id"])){
         
         if(!isset($_GET["product_id"]) or !isset($_SESSION["user"])){
-            header("location: ../login.php");
+            header("location: login.php");
         } 
         else{
             $userID = $_SESSION["user"]["id"];

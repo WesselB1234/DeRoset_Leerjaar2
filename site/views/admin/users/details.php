@@ -15,7 +15,7 @@
         }
     }
     else{
-        adminPermission();
+        adminPermission("../../login.php");
     }
 
     function deleteUser($conn,$userID){

@@ -12,7 +12,7 @@
         header("location: index.php");
     }
     else{
-        userPermission(); 
+        userPermission("../../login.php"); 
         
         $orderID = $_GET["id"];
         $order = getOrder($conn,$orderID);
@@ -37,7 +37,7 @@
 
     function getOrder($conn,$orderID){
         
-        $order = $conn->prepare("SELECT *,orders.id as 'order_id',locations.name as 'location_name'FROM orders
+        $order = $conn->prepare("SELECT *,orders.name as 'order_name',orders.id as 'order_id',locations.name as 'location_name'FROM orders
         JOIN locations on locations.id = orders.location_id 
         WHERE orders.id=:order_id");
 
@@ -116,7 +116,7 @@
 <body>
     <table>
         <br>
-        <h2>Bestelling: <?php echo $order["name"];?></h2>
+        <h2>Bestelling: <?php echo $order["order_name"];?></h2>
         <h2> <a href="../users/details.php?user_id=<?php echo $user["id"];?>"><?php echo $user["username"];?></a></h2>
         <thead>
             <th>Name</th>
