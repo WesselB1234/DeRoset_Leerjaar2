@@ -143,7 +143,7 @@
     <br>
     verander email
     <form action="settings.php" method="POST">
-        <input type="text" name="email" required placeholder="Email" value="<?php echo $user["email"];?>">
+        <input type="email" name="email" required placeholder="Email" value="<?php echo $user["email"];?>">
         <input type="submit">
     </form>
 

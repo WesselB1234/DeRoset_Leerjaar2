@@ -25,6 +25,14 @@
         return $user;
     }
 
+    function validateEmail($email){
+        return filter_var($email,FILTER_VALIDATE_EMAIL);
+    }
+
+    function notify($message){
+        echo $message;
+    }
+
     function createUser($conn,$username,$email,$role,$password){
 
         $hashedPassword = password_hash($password,PASSWORD_DEFAULT);
@@ -49,15 +57,18 @@
         $role = "user";
         $password = $_POST["password"]; 
 
-        if(isDuplicate($conn,$email) == false){
-            //filter!!!!!!!!!!!!!
+        if(ValidateEmail($email) == false){
+            notify("Email is geen email");
+        }
+        else if(ValidateEmail($email) && isDuplicate($conn,$email) == false){
+
             $user = createUser($conn,$username,$email,$role,$password);
-            $_SESSION["user"] = $user;
+            $_SESSION["user"]["id"] = $user["id"];
 
             header("location: user/index.php");
         }
         else{
-            echo "email already exists";
+           notify("Email bestaat al");
         }
     }
 ?>

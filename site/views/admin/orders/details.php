@@ -134,6 +134,15 @@
         </tbody>
     </table>
     
+    <ul>
+        <li><?php echo $deliverArray[$order["is_deliver"]];?></li>
+        <li>Adres: <?php echo $order["address"];?></li>
+        <li>Postcode: <?php echo $order["postalcode"];?></li>
+        <li>Locatie: <?php echo $order["location_name"];?></li>
+        <li>Telefoonnummer: <?php echo $order["telephone_number"];?></li>
+        <li>Bestellings datum: <?php echo $order["order_date"];?></li>
+    </ul>
+
     <h4>Totale kost: € <?php echo $totalCost;?></h4>
 
     <?php if($order["is_collected"] == 0 && $order["is_canceled"] == 0){?>

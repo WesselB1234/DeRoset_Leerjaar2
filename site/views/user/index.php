@@ -27,6 +27,7 @@
     <title>Document</title>
 </head>
 <body>
+    <h2><?php echo $user["username"];?></h2>
     <a href="orders/index.php">Bekijk bestellingen</a>
     <a href="settings.php">Gebruikers instellingen</a>
 </body>

@@ -2,11 +2,27 @@
     require "../../../database.php";
     require "../../../permissions.php";
 
+    $orderID = null;
+    $order = null;
+
+    $userID = null;
+    $user = null;
+
     if(!isset($_GET["id"])){
         header("location: index.php");
     }
     else{
-        userPermission();
+        userPermission(); 
+        
+        $orderID = $_GET["id"];
+        $order = getOrder($conn,$orderID);
+
+        $userID = $_SESSION["user"]["id"];
+        $user = getUser($conn,$userID);
+
+        if($order["user_id"] != $userID){
+            header("location: index.php");
+        }
     }
 
     function getUser($conn,$userID){
@@ -21,7 +37,10 @@
 
     function getOrder($conn,$orderID){
         
-        $order = $conn->prepare("SELECT * FROM orders WHERE id=:order_id");
+        $order = $conn->prepare("SELECT *,orders.id as 'order_id',locations.name as 'location_name'FROM orders
+        JOIN locations on locations.id = orders.location_id 
+        WHERE orders.id=:order_id");
+
         $order->bindParam("order_id",$orderID);
         $order->execute();
         $order = $order->fetch();
@@ -72,15 +91,6 @@
 
         return $totalCost;
     }
-    
-    $orderID = $_GET["id"];
-    $order = getOrder($conn,$orderID);
-
-    if(isset($_GET["collected"]) && $order["is_canceled"] == 0){
-
-        collectOrder($conn,$orderID);
-        header("location: index.php");
-    }
      
     if(isset($_GET["cancel"]) && $order["is_collected"] == 0){
 
@@ -92,11 +102,7 @@
     $orderProducts = getOrderProducts($conn,$orderID);
 
     $totalCost = calculateTotalCostsOrder($conn,$order["is_deliver"],$orderID);
-
-    $userID = $_SESSION["user"]["id"];
-    $user = getUser($conn,$userID);
-
-    echo $totalCost;
+    $deliverArray = [0 => "Afhalen",1 => "Bezorgen"];
 ?>
 
 <!DOCTYPE html>
@@ -134,8 +140,16 @@
         </tbody>
     </table>
     
-    <h4>Totale kost: € <?php echo $totalCost;?></h4>
+    <ul>
+        <li><?php echo $deliverArray[$order["is_deliver"]];?></li>
+        <li>Adres: <?php echo $order["address"];?></li>
+        <li>Postcode: <?php echo $order["postalcode"];?></li>
+        <li>Locatie: <?php echo $order["location_name"];?></li>
+        <li>Telefoonnummer: <?php echo $order["telephone_number"];?></li>
+        <li>Bestellings datum: <?php echo $order["order_date"];?></li>
+    </ul>
 
+    <h4>Totale kost: € <?php echo $totalCost;?></h4>
    
     <?php if($order["is_collected"] == 1){
     ?>
@@ -144,7 +158,7 @@
     
     <br>
     <?php if($order["is_canceled"] == 0 && $order["is_collected"] == 0){?>
-        <a href="details.php?id=<?php echo $order["id"];?>&cancel=true">Annuleer</a>
+        <a href="details.php?id=<?php echo $order["order_id"];?>&cancel=true">Annuleer</a>
     <?php }
     else if($order["is_canceled"] == 1){
     ?>

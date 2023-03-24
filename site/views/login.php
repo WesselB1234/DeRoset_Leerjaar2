@@ -20,7 +20,7 @@
 
         if((!empty($user) && password_verify($password,$user["password"]))){
 
-            $_SESSION["user"] = $user;
+            $_SESSION["user"]["id"] = $user["id"];
 
             header("location: user/index.php");
         }
