@@ -1,5 +1,5 @@
-<a href="login.php">Over ons</a>
-<a href="order/index.php">Bestellen</a>
+<a href="about.php">Over ons</a>
+<a href="order.php">Bestellen</a>
 <a href="blog.php">Blog</a>
 <a href="contact.php">Contact</a>
 <?php if(!isset($_SESSION["user"])){?>

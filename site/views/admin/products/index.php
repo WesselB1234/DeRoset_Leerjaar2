@@ -54,7 +54,7 @@
                     <?php echo $product["name"];?>
                 </td>
                 <td>
-                    <?php echo $product["price_liter"];?>
+                    € <?php echo $product["price_liter"];?>
                 </td>
                 <td>
                     <?php echo $product["brand_name"];?>

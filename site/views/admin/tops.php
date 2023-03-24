@@ -1,6 +1,6 @@
 <?php 
-    require "../../../database.php";
-    require "../../../permissions.php";
+    require "../../database.php";
+    require "../../permissions.php";
 
     adminPermission();
 
@@ -105,7 +105,7 @@
     
     Daglijks
 
-    <form action="index.php" method="POST">
+    <form action="tops.php" method="POST">
         <select name="daily_id" method="POST">
             <?php foreach($products as $product) {?>
                 <option value="<?php echo $product["id"];?>"><?php echo $product["name"];?></option>
@@ -133,13 +133,13 @@
                         <?php echo $daily["product_name"];?>
                     </td>
                     <td>
-                        <?php echo $daily["price_liter"];?>
+                        € <?php echo $daily["price_liter"];?>
                     </td>
                     <td>
                         <?php echo $daily["brand_name"];?>
                     </td>
                     <td>
-                        <a href="index.php?delete=<?php echo $daily["top_id"]?>">Verwijder</a>
+                        <a href="tops.php?delete=<?php echo $daily["top_id"]?>">Verwijder</a>
                     </td>
                 <?php } 
                 else{?>
@@ -159,7 +159,7 @@
 
      Weeklijk
 
-    <form action="index.php" method="POST">
+    <form action="tops.php" method="POST">
         <select name="weekly_id">
             <?php foreach($products as $product) {?>
                 <option value="<?php echo $product["id"];?>"><?php echo $product["name"];?></option>
@@ -193,7 +193,7 @@
                     <?php echo $weekTop["brand_name"];?>
                 </td>
                 <td>
-                    <a href="index.php?delete=<?php echo $weekTop["top_id"]?>">Verwijder</a>
+                    <a href="tops.php?delete=<?php echo $weekTop["top_id"]?>">Verwijder</a>
                 </td>
             </tr>
             <?php }?>

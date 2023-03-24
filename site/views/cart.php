@@ -13,7 +13,7 @@
     
     function getCartProducts($conn,$userID){
         
-        $cartOrders = $conn->prepare("SELECT *,products.name as product_name FROM carts_products
+        $cartOrders = $conn->prepare("SELECT *,products.name as product_name,products.price_liter * carts_products.liter as 'total_cost' FROM carts_products
         JOIN products ON products.id = carts_products.product_id
         WHERE user_id=:user_id");
         
@@ -153,6 +153,9 @@
             <th>
                 Liter  
             </th>
+            <th>
+                Koste
+            </th>
         </thead>
         <tbody>
             <?php foreach($cartOrders as $order){?>
@@ -164,6 +167,9 @@
                         <?php echo $order["liter"];?>
                     </td>
                     <td>
+                        € <?php echo $order["total_cost"];?>
+                    </td>
+                    <td>
                         <button id="button<?php echo $order["id"]?>" onclick="insertValueChangeForm('<?php echo $order['id']?>',<?php echo $order['product_id']?>)">Verander</button>
                     </td>
                 </tr>
@@ -173,9 +179,9 @@
 
     <br>
     <form action="cart.php" method="POST">
-        <input type="radio" name="is_deliver" onchange="changeCostText(10)" required> Bezorgen
+        <input type="radio" name="is_deliver" onchange="changeCostText(10.00)" required> Bezorgen
         <br>
-        <input type="radio" name="is_deliver" onchange="changeCostText(0)" required> Afhalen
+        <input type="radio" name="is_deliver" onchange="changeCostText(0.00)" required> Afhalen
         <br>
         <input type="text" placeholder="Naam" name="name" required>
         <br>
@@ -230,7 +236,6 @@
                 duplicate.parentElement.remove();
             }
         }
-
     </script>
 </body>
 </html>
