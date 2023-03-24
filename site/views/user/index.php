@@ -4,7 +4,18 @@
 
     userPermission();
 
-    $user = $_SESSION["user"];
+    function getUser($conn,$userID){
+
+        $user = $conn->prepare("SELECT * FROM users WHERE id=:id");
+        $user->bindParam("id",$userID);
+        $user->execute();
+        $user = $user->fetch();
+
+        return $user;
+    }
+
+    $userID = $_SESSION["user"]["id"];
+    $user = getUser($conn,$userID);
 ?>
 
 <!DOCTYPE html>
@@ -16,8 +27,6 @@
     <title>Document</title>
 </head>
 <body>
-    <h2><?php echo $user["username"];?></h2>
-
     <a href="activeOrders.php">Bekijk bestellingen</a>
     <a href="settings.php">Gebruikers instellingen</a>
 </body>

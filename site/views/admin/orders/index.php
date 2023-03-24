@@ -4,9 +4,16 @@
 
     adminPermission();
 
-    $orders = $conn->prepare("SELECT * FROM orders");
-    $orders->execute();
-    $orders = $orders->fetchAll();
+    function getOrders($conn){
+        
+        $orders = $conn->prepare("SELECT *,orders.id as 'order_id',users.username FROM orders JOIN users on users.id = orders.user_id");
+        $orders->execute();
+        $orders = $orders->fetchAll();
+
+        return $orders;
+    }
+
+    $orders = getOrders($conn);
 ?>
 
 <!DOCTYPE html>
@@ -24,7 +31,10 @@
                 Id
             </th>
             <th>
-                User
+                Bestelling naam
+            </th>
+            <th>
+                Gebruiker
             </th>
         </thead>
         <tbody>
@@ -34,10 +44,13 @@
                         <?php echo $order["id"];?>
                     </td>
                     <td>
-                        <?php echo $order["user_id"];?>
+                        <?php echo $order["name"];?>
                     </td>
                     <td>
-                        <a href="details.php?id=<?php echo $order["id"]?>">Bekijk</a>
+                        <a href="../users/details.php?user_id=<?php echo $order["user_id"];?>"><?php echo $order["username"];?></a>
+                    </td>
+                    <td>
+                        <a href="details.php?id=<?php echo $order["order_id"]?>">Bekijk</a>
                     </td>
                 </tr>
             <?php }?>

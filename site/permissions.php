@@ -9,7 +9,7 @@
     function userPermission(){
         
         if(!isset($_SESSION["user"])){
-            header("location ../login.php");
+            header('location: ../login.php');
         }
     }
 ?>
