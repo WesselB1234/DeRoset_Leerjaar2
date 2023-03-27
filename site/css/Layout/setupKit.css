@@ -1,0 +1,52 @@
+body{
+    margin: 0;
+}
+
+.pageLayoutGrid{
+
+    display: grid;
+    grid-template-areas:
+        'home home navbar navbar navbar navbar'
+        'dailyTop dailyTop content content content content'
+        'popularTop popularTop content content content content'
+        'popularTop popularTop content content content content'
+        'popularTop popularTop content content content content'
+        'footer footer footer footer footer footer';
+
+    height: 100vh;
+    width: 100vw; 
+    grid-auto-rows: 16.645%;
+    grid-auto-columns: 16.645%;
+}
+
+.pageLayoutGrid > div{
+    border: black 1px solid;
+}
+
+.pageLayoutGrid .home{
+    grid-area: home;
+}
+
+.pageLayoutGrid .navbar{
+    grid-area: navbar;
+}
+
+.pageLayoutGrid .dailyTop{
+    grid-area: dailyTop;
+}
+
+.pageLayoutGrid .dailyTop{
+    grid-area: dailyTop;
+}
+
+.pageLayoutGrid .popularTop{
+    grid-area: popularTop;
+}
+
+.pageLayoutGrid .content{
+    grid-area: content;
+}
+
+.pageLayoutGrid .footer{
+    grid-area: footer;
+}

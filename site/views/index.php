@@ -41,7 +41,7 @@
     <title>Document</title>
 </head>
 <body>
-    <?php include 'layout/navbar.php';?>
+    <!-- <?php include 'layout/navbar.php';?>
 
     <br>
     dagelijks
@@ -54,6 +54,13 @@
         <div>
             <h4><?php echo $top["product_name"];?></h4>
         </div>
-    <?php }?>
+    <?php }?> -->
+    
+    <?php include 'layout/setupKit.php';?>
+        
+        <div class="content">
+
+        </div>
+    </div>
 </body>
 </html>
