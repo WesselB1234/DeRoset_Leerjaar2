@@ -28,6 +28,7 @@ body{
 }
 
 .pageLayoutGrid .navbar{
+    display: flex;
     grid-area: navbar;
 }
 
