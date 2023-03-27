@@ -75,19 +75,16 @@
     <?php include 'layout/setupKit.php';?>
         
         <div class="contentContainer">
+
+            <div>Bestellen</div>
+            <div>(Prijs per liter)</div>
+
             <div class="productContainer">
-                <?php foreach($products as $product) {?>
+               <?php foreach($products as $product) {?>
                 <div class="productCard">
                     <a href="order.php?product_id=<?php echo $product["id"]?>">
                         <img class ="productImage" src="../images/products/<?php echo $product["image"];?>">
-                        <div><?php echo $product["name"]?></div>
-                    </a>
-                </div>
-                <?php }?>
-                <?php foreach($products as $product) {?>
-                <div class="productCard">
-                    <a href="order.php?product_id=<?php echo $product["id"]?>">
-                        <img class ="productImage" src="../images/products/<?php echo $product["image"];?>">
+                        <div class="costIndicator">€ <?php echo $product["price_liter"];?></div>
                         <div><?php echo $product["name"]?></div>
                     </a>
                 </div>

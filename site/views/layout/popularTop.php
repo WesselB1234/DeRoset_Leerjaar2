@@ -16,13 +16,6 @@
 ?>
 
 <div class="popularTopContainer">
-
-    <br>
-    dagelijks
-    <br>
-    <h3><?php echo $daily["product_name"];?></h3>
-    <br>
-    <br>
     weeklijks
     <?php foreach($weekly as $top){?>
         <div>

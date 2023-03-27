@@ -1,9 +1,10 @@
 .dailyTopContainer{
-    background-color: aqua;
+    background-color: rgb(215, 232, 248);
+    border:rgb(254, 109, 196) solid 3px;
     border-radius: 10px;
     
     width: 80%;
-    height: 100px;
+    height: 150px;
     
     margin: auto;
     margin-left: 30px;

@@ -16,5 +16,10 @@
 ?>
 
 <div class="dailyTopContainer">
-    hi
+    <br>
+    dagelijks
+    <br>
+    <h3><?php echo $daily["product_name"];?></h3>
+
+    <a href="">Bestel</a>
 </div>

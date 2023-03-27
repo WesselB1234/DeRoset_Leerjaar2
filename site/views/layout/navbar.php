@@ -1,5 +1,5 @@
 <nav>
-    <a href="about.php">Over ons</a>
+    <a href="index.php">Over ons</a>
     <a href="order.php">Bestellen</a>
     <a href="blog.php">Blog</a>
     <a href="contact.php">Contact</a>
@@ -10,7 +10,6 @@
     <?php }
     else {?>
         <a href="user/index.php">Mijn account</a>
-        <a href="cart.php">Winkelmandje</a>
     <?php }?>
 
     <?php if(isset($_SESSION["user"]) && $_SESSION["user"]["role"] == "staff"){?>
@@ -18,3 +17,8 @@
     <?php }?>
 </nav>
 
+<?php if(isset($_SESSION["user"])){?>
+    <a href="cart.php">
+        <img class="shoppingCard"src="../../images/layout/shopping_cart-removebg-preview.png" alt="">
+    </a>
+<?php }?>

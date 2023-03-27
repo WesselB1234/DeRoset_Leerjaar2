@@ -1,9 +1,19 @@
 .contentContainer{
-    background-color: aqua;
+    background-color: rgb(250, 229, 248);
     border-radius: 10px;
-    
+
+    border: black solid 3px;
+
     width: 90%;
     height: 700px;
     
     margin: auto;
+}
+.contentContainer .right{
+    width: 400px;
+    height: 300px;
+}
+.contentContainer .left{
+    width: 400px;
+    height: 300px;
 }

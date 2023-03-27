@@ -1,20 +1,34 @@
-footer{
+footer{ 
     width: 96%;
     height: 80%;
-    background-color: aqua;
+    background-color: rgb(93, 6, 62);
+    border-radius: 40px;
+    margin: auto;
+    
+    display: flex;
+}
+
+.footer .itemContainer{
+    width: 90%;
     display: flex;
     flex-direction: row;
-
     margin: auto;
 
-    border-radius: 10px;
+    gap: 100px;
 }
 
 footer .item{
     display: inline-block;
+    background-color: rgb(60, 0, 42);
     flex: 50%;
+    height: 120px;
+
+    color: aliceblue;
     margin: auto;
+    text-align: center;
 }
+
 footer .item ul{
     display: inline-block;
+    list-style-type: none;
 }

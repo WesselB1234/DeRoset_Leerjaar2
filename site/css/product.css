@@ -1,16 +1,34 @@
-.productCard{
-    width: 120px;
-    height: 120px;
+.productCard{ 
+    background-color: hsl(335, 83%, 88%);
+    width: 140px;
+    height: 155px;
     text-align: center;
-    background-color: aqua;
+    
+    border: black solid 3px;
+    border-radius: 20px;
 }
 .productImage{
-    width: 120px;
-    height: 120px;
+    width: 125px;
+    height: 125px;
+
+    margin-top: 3px;
+    border-radius: 40px;
+    border: rgb(255, 255, 255) solid 3px;
 }
 .productCard a{
     text-decoration: none;
+    color: rgb(0, 0, 0);
 }
 .productCard span{
     font-size: 20px;
+}
+.productCard .costIndicator{
+    position: absolute;
+    margin-top: -40px;
+    margin-left: 100px;
+
+    font-size: 20px;
+
+    background-color: aliceblue;
+    border: black solid 1px;
 }

@@ -4,8 +4,12 @@ body{
     background-image: url("../../images/layout/chapterbackground.jpg");;
 }
 
-.pageLayoutGrid{
+.contentContainer .title{
+    font-size: 40px;
+    margin-left: 50px;
+}
 
+.pageLayoutGrid{
     display: grid;
     grid-template-areas:
         'home home navbar navbar navbar navbar'

@@ -1,5 +1,6 @@
 .popularTopContainer{
-    background-color: aqua;
+    background-color: rgb(215, 232, 248);
+    border:rgb(254, 109, 196) solid 3px;
     width: 80%;
     height: 500px;
     border-radius: 10px;
