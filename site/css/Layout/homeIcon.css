@@ -1,10 +1,12 @@
 .iconContainer{
    background-color: rgb(215, 232, 248);
    border:rgb(254, 109, 196) solid 3px;
+   background-color: hsl(335, 93%, 71%);
+   box-shadow: 0px 0px 10px 2px gray;
    border-radius: 10px;
    
    width: 70%;
-   height: 150px;
+   height: 165px;
    
    margin: auto;
    margin-left: 30px;
@@ -14,6 +16,7 @@
 .iconContainer img{
    margin-top: 8px;
    border: black solid 3px;
+   background-color: rgb(215, 232, 248);
    border-radius: 10px;
    width: 100px;
    height: 100px;

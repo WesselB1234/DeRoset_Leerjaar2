@@ -19,7 +19,11 @@
     weeklijks
     <?php foreach($weekly as $top){?>
         <div>
-            <h4><?php echo $top["product_name"];?></h4>
+            <div class="productCard">
+                <img class ="productImage" src="../images/products/<?php echo $top["image"];?>">
+                <div class="costIndicator">€ <?php echo $top["price_liter"];?></div>
+                <div><?php echo $top["product_name"]?></div>
+            </div>
         </div>
     <?php }?>
 </div>

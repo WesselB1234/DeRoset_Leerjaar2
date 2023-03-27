@@ -1,7 +1,8 @@
 body{
     margin: 0;
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-    background-image: url("../../images/layout/chapterbackground.jpg");;
+    background-image: url("../../images/layout/chapterbackground.jpg");
+    background-attachment: fixed;
 }
 
 .contentContainer .title{
@@ -21,7 +22,6 @@ body{
 
     height: 150vh;
     width: 98.92vw;
-    grid-auto-rows: 16.645%;
     grid-auto-columns: 16.645%;
 }
 

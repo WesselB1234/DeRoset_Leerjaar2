@@ -1,11 +1,39 @@
 .dailyTopContainer{
-    background-color: rgb(215, 232, 248);
+    background-color: rgb(232, 215, 248);
     border:rgb(254, 109, 196) solid 3px;
     border-radius: 10px;
     
     width: 80%;
-    height: 150px;
+    height: 250px;
+
+    box-shadow: 0px 0px 10px 2px gray;
     
     margin: auto;
     margin-left: 30px;
+
+    text-align: center;
+}
+
+.dailyTopContainer .productCard{
+    margin:auto;
+}
+
+.dailyTopContainer .title{
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.dailyTopContainer a{
+    display: block;
+    text-decoration: none;
+    font-size: 30px;
+    color: rgb(255, 23, 116);
+    border:black solid 2px;
+    background-color: aliceblue;
+
+    border-radius: 5px;
+
+    margin: auto;
+    margin-top: 10px;
+    width: 40%;
 }

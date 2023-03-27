@@ -4,6 +4,7 @@
 <link rel="stylesheet" href="../../css/Layout/homeIcon.css">
 <link rel="stylesheet" href="../../css/Layout/dailyTop.css">
 <link rel="stylesheet" href="../../css/Layout/popularTop.css">
+<link rel="stylesheet" href="../../css/product.css">
 
 <div class="pageLayoutGrid">
     <div class="navbar">

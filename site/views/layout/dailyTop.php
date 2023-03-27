@@ -16,10 +16,13 @@
 ?>
 
 <div class="dailyTopContainer">
-    <br>
-    dagelijks
-    <br>
-    <h3><?php echo $daily["product_name"];?></h3>
-
+    <div class="title">
+        Smaak van de dag
+    </div>
+    <div class="productCard">
+        <img class ="productImage" src="../images/products/<?php echo $daily["image"];?>">
+        <div class="costIndicator">€ <?php echo $daily["price_liter"];?></div>
+        <div><?php echo $daily["product_name"]?></div>
+    </div>
     <a href="">Bestel</a>
 </div>

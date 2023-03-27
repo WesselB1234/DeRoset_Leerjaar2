@@ -1,7 +1,7 @@
 .contentContainer{
-    background-color: aqua;
-    border-radius: 10px;
-    
+    background-color: rgb(250, 229, 248);
+    border: black solid 2px;
+
     width: 90%;
     height: 700px;
     
@@ -9,7 +9,6 @@
 }
 
 .contentContainer .productContainer{
-
     background-image: url('../images/layout/wood.jpg');
     width: 90%;
     height: 75%;
@@ -17,5 +16,5 @@
     margin-top: 10%;
 
     display: grid;
-    grid-template-columns: repeat(auto-fit,minmax(140px,1fr))
+    grid-template-columns: repeat(auto-fill,170px)
 }

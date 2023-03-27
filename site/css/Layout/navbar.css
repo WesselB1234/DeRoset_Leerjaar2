@@ -2,6 +2,7 @@ nav{
     width: 90%;
     height: 50px;
     background-color: hsl(335, 93%, 71%);
+    box-shadow: 0px 0px 10px 2px gray;
     display: flex;
     flex-direction: row;
     text-align: center;
@@ -27,7 +28,22 @@ nav a:hover{
 .shoppingCard{
     width: 60px;
     height: 60px;
+
     position: absolute;
     margin-left: -8%;
     margin-top: 130px;
+}
+.containsProducts{
+    background-color: rgb(255, 74, 74);
+    width: 20px;
+    height: 20px;
+    border-radius: 1000px;
+
+    margin-left: -8%;
+    margin-top: 130px;
+    position: absolute;
+}
+.onUrlPage{
+    background-color: rgb(109, 69, 91);
+    border-radius: 10px;
 }
