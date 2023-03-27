@@ -5,7 +5,6 @@
 <link rel="stylesheet" href="../../css/Layout/dailyTop.css">
 <link rel="stylesheet" href="../../css/Layout/popularTop.css">
 
-
 <div class="pageLayoutGrid">
     <div class="navbar">
         <?php include "navbar.php";?>
@@ -26,3 +25,6 @@
     <div class="footer">
         <?php include "footer.php";?>
     </div>
+
+    <div class="content">
+        

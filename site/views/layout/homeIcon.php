@@ -1,3 +1,4 @@
 <div class="iconContainer">
-    hi
+    <img src="../../images/layout/iceIcon.png" alt="">
+    <span class="title">De Roset</span>
 </div>

@@ -4,10 +4,17 @@ footer{
     background-color: aqua;
     display: flex;
     flex-direction: row;
-    text-align: center;
-    right: auto;
 
     margin: auto;
 
     border-radius: 10px;
+}
+
+footer .item{
+    display: inline-block;
+    flex: 50%;
+    margin: auto;
+}
+footer .item ul{
+    display: inline-block;
 }

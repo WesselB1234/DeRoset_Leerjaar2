@@ -1,0 +1,25 @@
+.contentContainer{
+    background-color: aqua;
+    border-radius: 10px;
+    
+    width: 90%;
+    height: 700px;
+    
+    margin: auto;
+}
+
+.contentContainer .productContainer{
+
+    background-image: url('../images/layout/wood.jpg');
+    background-color: rgb(95, 123, 123);
+    width: 98%;
+    height: 100%;
+    margin-left: 1%;
+
+    display: grid;
+    grid-template-columns: repeat(auto-fit,minmax(140px,1fr))
+}
+
+.productContainer .productCard{
+    background-color: antiquewhite;
+}
